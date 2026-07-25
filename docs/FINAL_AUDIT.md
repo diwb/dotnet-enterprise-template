@@ -25,6 +25,18 @@ The sprint preserved the existing Clean Architecture while raising the repositor
 - `dotnet test DotNetEnterpriseTemplate.slnx --configuration Release --no-build --verbosity minimal --collect "XPlat Code Coverage" --results-directory TestResults`: passed with 6 tests.
 - `dotnet list DotNetEnterpriseTemplate.slnx package --vulnerable --include-transitive`: no vulnerable packages reported.
 - `docker compose config`: compose file rendered successfully. The local Docker client emitted a host-specific permission warning for `C:\Users\diwbi\.docker\config.json`.
+- `docker compose up --build -d`: blocked in the current environment because Docker Desktop/Linux engine is not running. Exact error: `open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.`
+
+## Project 1.1 Closure Evidence
+
+- Funding metadata: `.github/FUNDING.yml` was removed because no real funding channel is configured.
+- CODEOWNERS: `.github/CODEOWNERS` contains `* @diwb`, matching the GitHub repository owner from `origin` (`diwb/dotnet-enterprise-template`).
+- Docker result: full API + SQL Server execution could not be validated because the Docker engine is unavailable in the current environment. Health check, database connectivity and migration execution were not claimed.
+- Workflow status before this closure commit:
+  - CI for `45cb70d`: failed at [run 30165999003](https://github.com/diwb/dotnet-enterprise-template/actions/runs/30165999003). The likely cross-platform formatting issue was addressed by changing `.editorconfig` from CRLF to LF and re-running `dotnet format --verify-no-changes --no-restore` successfully.
+  - CodeQL for `45cb70d`: passed at [run 30165998978](https://github.com/diwb/dotnet-enterprise-template/actions/runs/30165998978).
+- Release status: GitHub API returned 404 for `releases/tags/v1.0.0`; the tag exists, but no formal GitHub Release object is present. `gh` is not installed, no `GITHUB_TOKEN`, `GH_TOKEN` or `GITHUB_PAT` environment variable is configured, and the available GitHub connector does not expose release creation.
+- Final commit hash: a commit cannot contain its own final hash. The final pushed hash for this closure commit is reported in the sprint close-out response after the commit is created.
 
 ## Improvements Considered And Deferred
 

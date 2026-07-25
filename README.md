@@ -19,6 +19,7 @@ The template models a B2B commerce API with customers, orders, order items, paym
 - Clean Architecture solution boundaries.
 - DDD-inspired aggregate roots and value objects.
 - CQRS-style MediatR commands and queries.
+- Domain event records on aggregates. Dispatching domain events to handlers is intentionally still on the roadmap.
 - FluentValidation command validation.
 - EF Core SQL Server persistence and migrations.
 - Auditing and soft delete support.
@@ -243,7 +244,7 @@ Use semantic commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `build:` a
 ## Roadmap
 
 - v1: enterprise template baseline, docs, CI, security controls and contribution readiness.
-- v2: refresh-token rotation endpoints, richer order lifecycle, SQL Server Testcontainers and OpenTelemetry.
+- v2: domain event dispatching, refresh-token rotation endpoints, richer order lifecycle, SQL Server Testcontainers and OpenTelemetry.
 - v3: template packaging, multi-tenant sample module, deployment blueprints and reference dashboards.
 
 ## Troubleshooting
