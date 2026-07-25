@@ -19,3 +19,11 @@ The template seeds `admin@enterprise.local` for local development. Production de
 ## ADR-005: Integration tests avoid external infrastructure
 
 The `Testing` environment disables database health checks so CI can verify API bootstrapping without requiring SQL Server.
+
+## ADR-006: Use ProblemDetails for unexpected failures
+
+The API exposes unexpected failures as RFC 7807 responses. This creates a predictable client contract while keeping stack traces and sensitive details out of HTTP responses.
+
+## ADR-007: Keep GitHub Actions provider-native
+
+The pipeline uses official GitHub Actions, CodeQL and .NET CLI commands instead of custom scripts. This improves transparency for contributors and reduces operational surprise.

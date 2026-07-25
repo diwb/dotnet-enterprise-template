@@ -5,15 +5,68 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+env:
+  DOTNET_VERSION: 10.0.x
+  SOLUTION: DotNetEnterpriseTemplate.slnx
+  BUILD_CONFIGURATION: Release
 
 jobs:
   build-test:
+    name: restore build test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
-      - run: dotnet restore DotNetEnterpriseTemplate.slnx
-      - run: dotnet build DotNetEnterpriseTemplate.slnx --configuration Release --no-restore
-      - run: dotnet test DotNetEnterpriseTemplate.slnx --configuration Release --no-build --verbosity normal
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', 'global.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION }}
+
+      - name: Verify formatting
+        run: dotnet format ${{ env.SOLUTION }} --verify-no-changes --no-restore --verbosity diagnostic
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+      - name: Test with coverage
+        run: >
+          dotnet test ${{ env.SOLUTION }}
+          --configuration ${{ env.BUILD_CONFIGURATION }}
+          --no-build
+          --logger "trx"
+          --collect "XPlat Code Coverage"
+          --results-directory TestResults
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: TestResults/**/coverage.cobertura.xml
+
+      - name: Check package vulnerabilities
+        run: dotnet list ${{ env.SOLUTION }} package --vulnerable --include-transitive

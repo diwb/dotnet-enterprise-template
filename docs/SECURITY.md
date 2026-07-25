@@ -18,7 +18,17 @@ Open a private security advisory or contact the maintainers directly. Do not dis
 - Rate limiting
 - Security response headers
 - Correlation IDs for incident tracing
+- Global exception handling with ProblemDetails
+- Package vulnerability checks in CI
 
 ## Production Notes
 
 Replace all development secrets, rotate seeded credentials, use managed secret storage and enable HTTPS at the edge.
+
+## Secret Management
+
+Do not commit production connection strings, JWT signing keys or credentials. Use environment variables, managed identity or a cloud secret manager.
+
+## Logging Guidance
+
+Avoid logging passwords, refresh tokens, access tokens, authorization headers, payment details or personal documents. Use correlation IDs to diagnose incidents without exposing sensitive values.

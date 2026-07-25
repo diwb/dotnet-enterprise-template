@@ -14,6 +14,8 @@ public sealed class HealthEndpointTests
 
         var response = await client.GetAsync("/health");
 
-        Assert.True((int)response.StatusCode < 500);
+        Assert.True(response.IsSuccessStatusCode);
+        Assert.True(response.Headers.Contains("X-Correlation-Id"));
+        Assert.Contains(response.Headers, header => header.Key == "X-Content-Type-Options");
     }
 }

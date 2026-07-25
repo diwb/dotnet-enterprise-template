@@ -1,13 +1,54 @@
-bin/
-obj/
+## Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+artifacts/
+
+## Visual Studio and Rider
 .vs/
 .vscode/
 .idea/
-TestResults/
 *.user
+*.rsuser
 *.suo
+*.userosscache
+*.sln.docstates
+
+## Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+coverage.cobertura.xml
+
+## NuGet
 *.nupkg
 *.snupkg
-coverage/
+packages/
+*.nuget.props
+*.nuget.targets
+
+## ASP.NET and local secrets
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+## Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.cache
+*.pid
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Repository placeholders
 docs/assets/*.png
 !docs/assets/.gitkeep

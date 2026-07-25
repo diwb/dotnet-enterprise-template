@@ -19,3 +19,11 @@ Yes. Integration tests use the `Testing` environment and avoid external database
 ## Is this ready for production as-is?
 
 It is a strong template baseline. Production use still requires secret management, environment-specific hardening, monitoring integration and deployment review.
+
+## Why is there a seeded admin user?
+
+The seeded user improves local onboarding. It must be changed or disabled in production deployments.
+
+## Why are some roadmap items not implemented?
+
+The repository is a template, not a full commerce platform. It intentionally demonstrates architectural patterns while leaving product-specific expansion to consuming teams.

@@ -1,0 +1,17 @@
+name: Question
+description: Ask a usage or architecture question.
+title: "question: "
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to understand or decide?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Share relevant code, commands, environment or constraints.

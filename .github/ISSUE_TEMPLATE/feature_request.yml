@@ -1,0 +1,38 @@
+name: Feature request
+description: Propose a useful improvement.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What limitation or workflow should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the expected behavior and developer experience.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Architecture
+        - Application
+        - Domain
+        - Infrastructure
+        - Persistence
+        - Presentation
+        - Documentation
+        - CI/CD
+    validations:
+      required: true

@@ -1,33 +1,67 @@
 # Architecture
 
-This template uses Clean Architecture with a strict dependency direction:
+This repository implements Clean Architecture for an enterprise ASP.NET Core Web API. The design goal is to keep business rules independent, make application use cases explicit and isolate infrastructure details behind composition and contracts.
 
-```text
-Presentation -> Application -> Domain
-Presentation -> Infrastructure -> Application
-Presentation -> Persistence -> Application
-Persistence -> Domain
+## Dependency Rule
+
+```mermaid
+flowchart LR
+  Presentation --> Application
+  Presentation --> Infrastructure
+  Presentation --> Persistence
+  Infrastructure --> Application
+  Persistence --> Application
+  Application --> Domain
+  Persistence --> Domain
+  Application --> Shared
+  Presentation --> Shared
 ```
+
+The Domain layer does not reference ASP.NET Core, EF Core, MediatR or infrastructure concerns.
 
 ## Layers
 
-`Domain` contains entities, aggregates, value objects, enums and domain events. It has no framework dependency.
+| Layer | Responsibility | Examples |
+| --- | --- | --- |
+| Domain | Enterprise rules and invariants | `Order`, `Customer`, `Payment`, domain events |
+| Application | Use cases and orchestration | Commands, queries, handlers, validators, DTOs |
+| Infrastructure | Runtime adapters | JWT token generation, password hashing, current user |
+| Persistence | Data access | EF Core DbContext, mappings, migrations, seed |
+| Presentation | HTTP boundary | Controllers, middleware, auth, CORS, rate limiting |
+| Shared | Cross-cutting primitives | Result pattern, pagination |
 
-`Application` contains CQRS requests, handlers, validators, DTOs and contracts. It references EF Core abstractions for pragmatic query composition.
+## Request Flow
 
-`Persistence` owns EF Core, SQL Server mappings, migrations, auditing and seed data.
+```mermaid
+sequenceDiagram
+  participant Client
+  participant Middleware
+  participant Controller
+  participant Handler
+  participant DbContext
+  Client->>Middleware: HTTP request
+  Middleware->>Middleware: Correlation id, security headers, exception handling
+  Middleware->>Controller: Routed action
+  Controller->>Handler: MediatR request
+  Handler->>DbContext: Query or command persistence
+  DbContext-->>Handler: Result
+  Handler-->>Controller: Result<T>
+  Controller-->>Client: HTTP response
+```
 
-`Infrastructure` owns cross-cutting adapters such as JWT token creation, password hashing and current-user resolution.
-
-`Presentation` is the composition root and HTTP boundary. It configures authentication, authorization, CORS, rate limiting, health checks, Serilog and middleware.
-
-## Domain
+## Domain Model
 
 The sample domain represents B2B commerce:
 
-- Customers with billing addresses
-- Orders with items
-- Payments
-- Application users with roles and refresh tokens
+- Customers with billing addresses.
+- Orders with items and lifecycle state.
+- Payments with status.
+- Application users with roles and refresh tokens.
 
 The domain supports soft delete and audit metadata through `AuditableEntity`.
+
+## Architectural Tradeoffs
+
+Application references EF Core abstractions to support efficient query composition. This is an intentional pragmatic choice. Persistence still owns DbContext implementation, mappings, migrations and provider configuration.
+
+Repository and specification abstractions are intentionally deferred until query complexity requires them.

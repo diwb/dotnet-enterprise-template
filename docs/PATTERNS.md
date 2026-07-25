@@ -32,3 +32,11 @@ Entities inherit `AuditableEntity`, and `ApplicationDbContext.SaveChangesAsync` 
 ## Middleware
 
 The API includes correlation IDs and security headers as global middleware.
+
+## ProblemDetails
+
+Unhandled exceptions are translated into RFC 7807 `ProblemDetails` responses by `GlobalExceptionMiddleware`. The response includes a correlation id so logs can be matched to client reports without exposing internal exception details.
+
+## Options Validation
+
+JWT settings are validated at startup. Invalid issuer, audience, signing key or token lifetime configuration fails fast instead of producing insecure runtime behavior.
